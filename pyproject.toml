@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "aoc"
+version = "0.1.0"
+description = "Advent of Code solutions"
+authors = ["ionite34 <dev@ionite.io>"]
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.12"
+advent-cli = ">=0.2.2"
+numba = "^0.56.0"
+scipy = ">=1.9.0"
+
+[tool.poetry.dev-dependencies]
+pytest = ">=7.1.2"
+
+[build-system]
+requires = ["poetry-core>=1.1.0"]
+build-backend = "poetry.core.masonry.api"
