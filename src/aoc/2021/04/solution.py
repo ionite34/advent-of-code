@@ -7,6 +7,7 @@ import re
 from itertools import groupby, product
 
 import numpy as np
+from funcy import print_durations
 
 
 def parse_input(lines: list[str]) -> tuple[np.ndarray, list[np.ma.masked_array]]:
@@ -34,6 +35,7 @@ def parse_input(lines: list[str]) -> tuple[np.ndarray, list[np.ma.masked_array]]
     return turns, boards
 
 
+@print_durations
 def part1(turns: np.ndarray, boards: list[np.ma.masked_array]) -> int:
     # Play bingo!
     draw: int
@@ -46,6 +48,7 @@ def part1(turns: np.ndarray, boards: list[np.ma.masked_array]) -> int:
             return result
 
 
+@print_durations
 def part2(turns: np.ndarray, boards: list[np.ma.masked_array]) -> int:
     # We want to find the board that will win last
     wins = set()  # indexes of boards that already won
