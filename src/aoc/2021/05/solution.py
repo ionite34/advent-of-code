@@ -1,6 +1,9 @@
 # advent of code 2021
 # https://adventofcode.com/2021
 # day 05
+from __future__ import annotations
+
+import time
 from pathlib import Path
 from dataclasses import dataclass
 from typing import Iterable
@@ -10,6 +13,9 @@ import seaborn as sns
 import matplotlib.pylab as plt
 
 # Get the parent folder of this file
+from funcy import print_durations
+from numba import njit
+
 PARENT_DIR = Path(__file__).resolve().parent
 
 # Plotting mode
@@ -55,8 +61,8 @@ class Line:
         y_cords = range(self.origin_y, y_dest, y_stride)
 
         result = (
-            np.fromiter(x_cords, dtype=np.int),
-            np.fromiter(y_cords, dtype=np.int),
+            np.fromiter(x_cords, dtype=np.int32),
+            np.fromiter(y_cords, dtype=np.int32),
         )
         # print(f"{self} | {list(zip(x_cords, y_cords))}")
         return result
@@ -74,6 +80,7 @@ def parse_input(lines: list[str]) -> tuple[list[str], int]:
     return lines, max_cord
 
 
+@print_durations
 def part1(data: list[str], max_cord: int) -> int:
     # Build board of max size matrix
     board = np.zeros((max_cord, max_cord), dtype=np.int8)
@@ -100,9 +107,12 @@ def part1(data: list[str], max_cord: int) -> int:
     return np.count_nonzero(board >= 2)
 
 
+@print_durations
 def part2(data: list[str], max_cord: int) -> int:
     # Build board of max size matrix
     board = np.zeros((max_cord, max_cord), dtype=np.int8)
+    x_cords: None | np.ndarray = None
+    y_cords: None | np.ndarray = None
     for line in data:
         origin, dest = line.split(' -> ')
         line = Line(
@@ -117,9 +127,12 @@ def part2(data: list[str], max_cord: int) -> int:
         else:
             # Get all cords, and update board
             a, b = line.all_cords
-            cnt = np.bincount(a * max_cord + b)
-            cnt.resize((max_cord, max_cord))
-            board += cnt
+            x_cords = a if x_cords is None else np.concatenate((x_cords, a))
+            y_cords = b if y_cords is None else np.concatenate((y_cords, b))
+
+    cnt = np.bincount(x_cords * max_cord + y_cords)
+    cnt.resize((max_cord, max_cord))
+    board += cnt
 
     # Plot heatmap
     if PLOT:
