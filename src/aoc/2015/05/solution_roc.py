@@ -9,7 +9,7 @@ def part1(data: list[str]) -> int:
     ) for x in data)
 
 
-def part2(data: list[str]) -> int:
+def part2(data: list[str]) -> int | None:
     return sum(bool(
         re.search(r'([a-z])[a-z](\1)', x) and
         re.search(r'([a-z])([a-z]).*(\1)(\2)', x)
