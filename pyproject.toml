@@ -16,6 +16,7 @@ alive-progress = "^2.4.1"
 networkx = "^2.8.5"
 joblib = "^1.1.0"
 mypy = "^0.971"
+rich = "^12.5.1"
 
 [tool.poetry.dev-dependencies]
 pytest = ">=7.1.2"
