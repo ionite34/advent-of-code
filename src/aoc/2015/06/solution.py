@@ -3,6 +3,7 @@
 # day 06
 import re
 import numpy as np
+from funcy import print_durations
 
 from aoc import log
 
@@ -15,43 +16,41 @@ def parse_input(lines: list[str]):
 
 
 def solver(lines: list[str], alt_toggle: bool = False) -> np.ndarray:
-    # Make a 1000x1000 grid
-    grid = np.zeros((1000, 1000), dtype=int)
-    log.info(f"Grid size: {grid.shape}")
-    # Parse input with regex)
-    for idx, line in enumerate(lines):
+    grid = np.zeros((1000, 1000), dtype=np.uint16)
+
+    for line in lines:
         res = RE_SEP.search(line)
 
         if not res:
-            log.warning(f"[{idx}] Could not parse line: {line}")
-            continue
+            raise ValueError(f"Could not parse {line}")
 
         mode = res.group(1)
         x1, y1, x2, y2 = map(int, res.group(2, 3, 4, 5))
-        log.info(f"[{idx}] ({mode}) {x1},{y1} to {x2},{y2}")
+        view = grid[x1:x2 + 1, y1:y2 + 1]
+
         if not alt_toggle:
             if mode == "on":
-                grid[x1:x2 + 1, y1:y2 + 1] = 1
+                view[:] = np.uint8(1)
             elif mode == "off":
-                grid[x1:x2 + 1, y1:y2 + 1] = 0
+                view[:] = np.uint8(0)
             else:  # toggle
-                grid[x1:x2 + 1, y1:y2 + 1] = 1 - grid[x1:x2 + 1, y1:y2 + 1]
+                view ^= np.uint8(1)
         else:
             if mode == "on":
-                grid[x1:x2 + 1, y1:y2 + 1] += 1
+                view += np.uint8(1)
             elif mode == "off":
-                grid[x1:x2 + 1, y1:y2 + 1] -= 1
-                grid = np.maximum(grid, 0)
+                view[view > 0] -= np.uint8(1)
             else:  # toggle
-                grid[x1:x2 + 1, y1:y2 + 1] += 2
+                view += np.uint8(2)
 
-        log.info(f"[{idx}] Grid: {np.sum(grid)}")
     return grid
 
 
+@print_durations
 def part1(data: list[str]) -> int:
     return int(np.sum(solver(data)))
 
 
+@print_durations
 def part2(data):
     return int(np.sum(solver(data, alt_toggle=True)))
