@@ -14,14 +14,31 @@ seaborn = "^0.11.2"
 funcy = "^1.17"
 alive-progress = "^2.4.1"
 networkx = "^2.8.5"
-joblib = "^1.1.0"
 mypy = "^0.971"
 rich = "^12.5.1"
+regex = "^2022.8.17"
+jupyter = "^1.0.0"
+parse = "^1.19.0"
+graphviz = "^0.20.1"
+pygraphviz = "^1.10"
+line-profiler-pycharm = "^1.1.0"
+opencv-python = "4.5.5.62"
+# opencv-python = "^4.6.0.0"
+Cython = "^0.29.32"
+pybind11 = "^2.10.0"
+tqdm = "^4.64.1"
+requests = "^2.28.1"
+beautifulsoup4 = "^4.11.1"
+pylint = "^2.15.3"
 
 [tool.poetry.dev-dependencies]
 pytest = ">=7.1.2"
 mypy = ">=0.971"
 black = "^22.6.0"
+poethepoet = "^0.16.2"
+
+[[tool.poe.tasks.build_np]]
+cmd = "pip install --force-reinstall --no-binary :all: numpy"
 
 [build-system]
 requires = ["poetry-core>=1.1.0"]
