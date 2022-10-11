@@ -12,6 +12,7 @@ from itertools import count
 from funcy import print_durations
 from functools import cache
 
+
 def parse_input(lines):
     return lines[0]
 
@@ -70,9 +71,9 @@ def check_valid_alt(text: str, leading_zeros: int) -> int | None:
 @print_durations
 @cache
 def part1(data: str):
-    return check_valid(data, "0"*5, 7)
+    return check_valid(data, "0" * 5, 7)
 
 
 @print_durations
 def part2(data: str):
-    return check_valid(data, "0"*6, 7, start=117946)
+    return check_valid(data, "0" * 6, 7, start=117946)
