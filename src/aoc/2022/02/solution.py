@@ -1,43 +1,49 @@
-def parse_input(lines: list[str]) -> tuple[list[str], list[str]]:
-    return lines[0], lines[1:]
+# advent of code 2022
+# https://adventofcode.com/2022
+# day 02
+
+WIN = 6
+DRAW = 3
+LOSE = 0
+
+TURN_A = "ABC"
+TURN_B = "XYZ"
 
 
-def part1(data: tuple[list[str], list[str]]) -> int:
-    opponent, decisions = data
-    score = 0
-    for round, choice in enumerate(opponent):
-        c = choices[choice]
-        d = decisions[round]
-        score += get_round_score(c, d)
-    # print("Total Score: {}".format(score))
-    return score
+def outcome(a: str, b: str) -> int:
+    a, b = TURN_A.index(a), TURN_B.index(b)
+    if a == b:
+        return DRAW
+
+    return WIN if (a + 1) % 3 == b else LOSE
 
 
-def part2(data: tuple[list[str], list[str]]) -> int:
-    opponent, decisions = data
-    score = 0
-    for round, choice in enumerate(opponent):
-        c = choices[choice]
-        d = min(decisions[round])
-        score += get_round_score(c, d)
-    # print("Total Score: {}".format(score))
-    return score
+def outcome_2(a: str, b: str) -> int:
+    # Draw
+    if b == "Y":
+        return TURN_A.index(a) + 1 + DRAW
+    # Lose
+    if b == "X":
+        turn = (TURN_A.index(a) + 2) % 3
+        return turn + 1 + LOSE
+    # Win
+    if b == "Z":
+        turn = (TURN_A.index(a) + 1) % 3
+        return turn + 1 + WIN
 
 
-choices = {
-    'A': 1,
-    'B': 2,
-    'C': 3,
-}
+def parse_input(lines):
+    return [line.split() for line in lines]
 
 
-def get_round_score(c: int, d: str) -> int:
-    choice = choices[d]
-    if choice == c:
-        score = 3
-    elif choice == c + 1 % 3:
-        score = 0
-    else:
-        score = 6
-    # print("Opponent choice: {}; Your choice: {} ({}) -> Score: {}".format(c, choice, d, score))
-    return score + choice
+def part1(data):
+    total = 0
+    for a, b in data:
+        s1 = TURN_A.index(a) + 1
+        s2 = outcome(a, b)
+        total += s1 + s2
+    return total
+
+
+def part2(data):
+    return sum(map(outcome_2, data))
